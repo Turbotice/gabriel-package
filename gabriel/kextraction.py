@@ -1,7 +1,8 @@
 
 
 import numpy as np
-from radialavg2 import radialavg2
+
+import gabriel.radialavg2 as radavg
 
 def kextraction(data, fitlength, step_ana):
     """
@@ -36,7 +37,7 @@ def kextraction(data, fitlength, step_ana):
         for y0 in range(fitlength, ny-fitlength+1, step_ana):
             phase_locale = np.ones((2*fitlength,2*fitlength))*np.exp(1j*np.angle(data[x0,y0]))
             signal_local = np.real(data[x0-fitlength:x0+fitlength, y0-fitlength:y0+fitlength]*phase_locale)
-            [r2,zr2] = radialavg2(signal_local, 1, fitlength+1, fitlength+1)
+            [r2,zr2] = radavg_radialavg2(signal_local, 1, fitlength+1, fitlength+1)
             xx = r2[0:fitlength]
             xx2 = np.concatenate((np.flipud(-xx),xx))
             test = np.abs(zr2[0:fitlength])

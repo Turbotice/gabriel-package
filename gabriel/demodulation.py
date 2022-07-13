@@ -3,8 +3,8 @@ import numpy as np
 
 def demodulation(t,s, fexc):
     """
-    This fonction is use to demodulate a signal a precise frequency 
-    for example the vibrating frequency of a vibrating bath "fexc"
+    Demodulate a signal at a precise frequency, 
+    for instance the frequency "fexc" of a vibrating bath
 
     :param: 
         * t: is a temporal vector field

@@ -1,9 +1,13 @@
 
 import numpy as np
 from dataclasses import dataclass
-from find_peaks import find_peaks
-from kspace import pixel2kspace
 from scipy.fft import fft, fft2, ifft2, fftshift, ifftshift, ifft
+from typing import List
+
+import gabriel.find_peaks as find_peaks
+import gabriel.kspace as kspace #pixel2kspace
+import gabriel.fft_inverse_gradient as fftinv# fftinvgrad
+
 from skimage import io
 from skimage import transform
 from skimage import filters
@@ -12,8 +16,7 @@ from skimage.filters.rank import median
 from skimage.color import rgb2gray
 from skimage.draw import disk
 from scipy.signal import detrend
-from fft_inverse_gradient import fftinvgrad
-from typing import List
+
 
 @dataclass
 class Carrier:
@@ -88,7 +91,7 @@ def calculate_carriers(i_ref):
     peak_radius = np.linalg.norm(peaks[0] - peaks[1]) / 2
     i_ref_fft = fft2(i_ref)
 
-    carriers = [Carrier(peak, pixel2kspace(i_ref.shape, peak), peak_radius, mask, ccsgn(i_ref_fft, mask)) for mask, peak
+    carriers = [Carrier(peak, kspace.pixel2kspace(i_ref.shape, peak), peak_radius, mask, ccsgn(i_ref_fft, mask)) for mask, peak
                 in
                 [(ifftshift(peak_mask(i_ref.shape, peak, peak_radius)), peak) for peak in peaks]]
     return carriers
@@ -139,7 +142,7 @@ def fcd_hstar(i_def, carriers: List[Carrier], alpha, hp, H):
     v_rescale = v*hstarinverse; # v = v*1/hstar
     u_rescale = detrend(u_rescale - np.mean(u_rescale))
     v_rescale = detrend(v_rescale - np.mean(v_rescale))
-    return fftinvgrad(-u_rescale, -v_rescale)/2/np.pi
+    return fftinv.fftinvgrad(-u_rescale, -v_rescale)/2/np.pi
 
 # Mesure de l'élévation entre une série d'images déformées et la référence
 def fcd_hstar_series(i_def, carriers: List[Carrier], alpha, hp, H, Nmax):

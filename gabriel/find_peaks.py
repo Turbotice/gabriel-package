@@ -4,8 +4,7 @@ from numpy import array
 from scipy.fft import fft2, fftshift, fftfreq
 from skimage.measure import regionprops, label
 
-from kspace import pixel2kspace
-
+import gabriel.kspace as kspace
 
 def peaks(img: array, thresshold, no_peaks, subpixel=False):
     """
@@ -58,7 +57,7 @@ def find_peaks(img):
     threshold = 0.5 * np.max(i_fft)
 
     peak_locations = peaks(i_fft, threshold, 4)
-    rightmost_peak = min(peak_locations, key=lambda p: abs(np.arctan2(*pixel2kspace(i_fft.shape, p))))
-    perpendicular_peak = min(peak_locations, key=lambda p: abs(np.dot(pixel2kspace(i_fft.shape, p), pixel2kspace(i_fft.shape, rightmost_peak))))
+    rightmost_peak = min(peak_locations, key=lambda p: abs(np.arctan2(kspace.pixel2kspace(i_fft.shape, p))))
+    perpendicular_peak = min(peak_locations, key=lambda p: abs(np.dot(kspace.pixel2kspace(i_fft.shape, p), kspace.pixel2kspace(i_fft.shape, rightmost_peak))))
 
     return rightmost_peak, perpendicular_peak

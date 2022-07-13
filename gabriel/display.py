@@ -68,7 +68,6 @@ def set_size(width, fraction=1, subplots=(1, 1)):
 
     ## FONTS
 
-
 ## CHOIX DES COULEURS
 
 def vcolors(n=7):

@@ -1,7 +1,7 @@
 
 import numpy as np
-from accum import accum
-from tools import cart2pol
+import gabriel.accum as accum
+import gabriel.tools as tools
 
 def radialavg2(data, radial_step,x0,y0):
     """
@@ -34,7 +34,7 @@ def radialavg2(data, radial_step,x0,y0):
     x = np.arange(0,data.shape[1]) - data.shape[1]/2+(l-x0)
     y = np.arange(0,data.shape[0]) - data.shape[0]/2+(l-y0)
     [X,Y] = np.meshgrid(x,y)
-    [R, Theta] = cart2pol(X,Y)
+    [R, Theta] = tools.cart2pol(X,Y)
     Zinteger = np.zeros(R.shape)
     Zinteger = R/radial_step
     Zinteger = np.abs(X+1j*Y)/radial_step+1
